@@ -7,7 +7,8 @@ function fetchAll(req,res)
 
 function fetchById(req,res)//funciones para GET del servicio web, en relacion de ubicaciones
 {
-    res.json(ubi.findById(req.params.id));
+    if(ubi.findById(req.params.id)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(ubi.findById(req.params.id));
 }
 
 function addUbicacion(req,res)//funcion para POST del servicio web, en relacion de ubicaciones

@@ -6,27 +6,33 @@ function fetchAll(req,res)
 }
 function fetchById(req,res)
 {
-    res.json(act.findById(req.params.id));
+    if(act.findById(req.params.id)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findById(req.params.id));
 }
 function fetchBySerie(req,res)//funciones para GET del servicio web, en relacion de activos
 {
-    res.json(act.findBySerie(req.params.serie));
+    if(act.findBySerie(req.params.serie)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findBySerie(req.params.serie));
 }
 function fecthByTipo(req,res)
 {
-    res.json(act.findByTipo(req.params.tipo));
+    if(act.findByTipo(req.params.tipo)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findByTipo(req.params.tipo));
 }
 function fetchByNumInv(req,res)
 {
-    res.json(act.findByNumInv(req.params.numInv));
+    if(act.findByNumInv(req.params.numInv)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findByNumInv(req.params.numInv));
 }
 function fetchByUbicacion(req,res)
 {
-    res.json(act.findByUbicacion(req.params.ubicacion));
+    if(act.findByUbicacion(req.params.ubicacion)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findByUbicacion(req.params.ubicacion));
 }
 function fetchByResponsable(req,res)
 {
-    res.json(act.findByResponsable(req.params.responsable));
+    if(act.findByResponsable(req.params.responsable)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(act.findByResponsable(req.params.responsable));
 }
 
 function addActivo(req,res)//funcion para POST del servicio web, en relacion de activos

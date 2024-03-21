@@ -4,20 +4,20 @@ function fetchAll(req,res)
 {
     res.json(resp.findAll());//utilizan funciones declaradas en responsableModel
 }
-
 function fetchById(req,res)//funciones para GET del servicio web, en relacion de responsables
 {
-    res.json(resp.findById(req.params.id));
+    if(resp.findById(req.params.id)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(resp.findById(req.params.id));
 }
-
 function fetchByNumEmp(req,res)
 {
-    res.json(resp.findByNumEmp(req.params.numEmp));
+    if(resp.findByNumEmp(req.params.numEmp)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(resp.findByNumEmp(req.params.numEmp));
 }
-
 function fetchByNombre(req,res)
 {
-    res.json(resp.findByNombre(res.params.nombre));
+    if(resp.findByNombre(res.params.nombre)==undefined) res.json("Error: no se encontro recurso.");
+    else res.json(resp.findByNombre(res.params.nombre));
 }
 
 function addResponsable(req,res)//funcion para POST del servicio web, en relacion de activos
@@ -41,7 +41,6 @@ function changeById(req,res)
     }
     else res.json("Error: no se encontro el responsable a cambiar o el nuevo activo no es apto para remplazar el anterior")
 }
-
 function changeByNumEmp(req,res)//funciones para PATCH del servicio web, en relacion de activos
 {
     const newVal = req.body;
@@ -52,7 +51,6 @@ function changeByNumEmp(req,res)//funciones para PATCH del servicio web, en rela
     }
     else res.json("Error: no se encontro el responsable a cambiar o el nuevo activo no es apto para remplazar el anterior")
 }
-
 function changeByNombre(req,res)
 {
     const newVal = req.body;
@@ -73,7 +71,6 @@ function deleteById(req,res)
     }
     else res.json("Error: no se encontro el activo que se quiere eliminar.")
 }
-
 function deleteByNumEmp(req,res)//funciones para DELETE del servicio web, en relacion de activos
 {
     if(resp.findByNumEmp(req.params.numEmp)!=null)

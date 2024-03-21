@@ -2,7 +2,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:1,
         serie:5121,
-        tipo:"Computadora",
+        tipo:"computadora",
         desc:"Una computadora comun de oficina, con una carcasa negra carateristica.",
         numInventario: 62,
         ubicacion: "cubiculo",
@@ -12,7 +12,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:2,
         serie:2612,
-        tipo:"Mouse",
+        tipo:"mouse",
         desc:"mouse negro alambrico que sirve, nada especial.",
         numInventario: 50,
         ubicacion: "cubiculo",
@@ -22,7 +22,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:3,
         serie:8691,
-        tipo:"Teclado",
+        tipo:"teclado",
         desc:"teclado gris que parecer ser muy usado.",
         numInventario: 36,
         ubicacion: "cubiculo",
@@ -42,7 +42,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:5,
         serie:8923,
-        tipo:"Monitor",
+        tipo:"monitor",
         desc:"monitor negro, esta limpio, probablemente para que se pueda apreciar lo que despliega",
         numInventario: 24,
         ubicacion: "cubiculo",
@@ -52,7 +52,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:6,
         serie:1010,
-        tipo:"Silla",
+        tipo:"silla",
         desc:"Silla de metal comodo, tiene bien respaldo.",
         numInventario: 12,
         ubicacion: "laboratorio",
@@ -62,7 +62,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:7,
         serie:2000,
-        tipo:"Mesa",
+        tipo:"mesa",
         desc:"mesa de plastico grueso, ya tiene tiempo siendo usado.",
         numInventario: 49,
         ubicacion: "laboratorio",
@@ -72,7 +72,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:8,
         serie:8941,
-        tipo:"Switch",
+        tipo:"switch",
         desc:"Un switch con muchas conexiones, creando una red con las computadoras de un cubiculo.",
         numInventario: 72,
         ubicacion: "cubiculo",
@@ -82,7 +82,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:9,
         serie:6660,
-        tipo:"Proyector",
+        tipo:"proyector",
         desc:"Colgado en el techo, manejado por un control remoto.",
         numInventario: 85,
         ubicacion: "cubiculo",
@@ -92,7 +92,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:10,
         serie:6636,
-        tipo:"Laptop",
+        tipo:"laptop",
         desc:"Laptop usado por el encargado de caseta.",
         numInventario: 100,
         ubicacion: "cubiculo",
@@ -102,7 +102,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:11,
         serie:5030,
-        tipo:"Librero",
+        tipo:"librero",
         desc:"Una librero, lleno de libros relacionado con programacion.",
         numInventario: 4,
         ubicacion: "oficina",
@@ -112,7 +112,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:12,
         serie:6000,
-        tipo:"Escritorio",
+        tipo:"escritorio",
         desc:"escritorio grande con muchas manchas, parece ser usado mucho, tambien esta lleno de hojas ordenadas",
         numInventario: 76,
         ubicacion: "oficina",
@@ -122,7 +122,7 @@ const bd=[ //lista de activos (falsos)
     {
         id:13,
         serie:5555,
-        tipo:"Silla de Oficina",
+        tipo:"silla de oficina",
         desc:"extremanadente comodo, uno podria estar sentado en el por horas",
         numInventario: 32,
         ubicacion: "oficina",
