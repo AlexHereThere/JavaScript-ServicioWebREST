@@ -2,24 +2,42 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('TipoDeActivos', {
+    await queryInterface.createTable('Activos', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      activoId: {
+      numSerie: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true
+      },
+      numInventario: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        unique: true
+      },
+      descripcion: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      imagen: {
+        type: Sequelize.BLOB,
+        allowNull: true
+      },
+      responsableId: {
         type: Sequelize.INTEGER,
         references:{
-          model: 'activos',
+          model: 'responsables',
           key: 'id'
         }
       },
-      tagId: {
+      ubicacionId: {
         type: Sequelize.INTEGER,
         references:{
-          model: 'tags',
+          model: 'ubicaciones',
           key: 'id'
         }
       },
@@ -34,6 +52,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('TipoDeActivos');
+    await queryInterface.dropTable('Activos');
   }
 };

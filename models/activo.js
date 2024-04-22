@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Activo.belongsToMany(models.Tag,{through: 'TipoDeActivo'})
+      Activo.belongsToMany(models.Tag,{through:'ActivoTag'});
+      Activo.belongsTo(models.Responsable);
+      Activo.belongsTo(models.Ubicacion);
     }
   }
   Activo.init({
@@ -32,7 +34,9 @@ module.exports = (sequelize, DataTypes) => {
     imagen: {
       type: DataTypes.BLOB,
       allowNull: true
-    }
+    },
+    responsableId: DataTypes.INTEGER,
+    ubicacionId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Activo',

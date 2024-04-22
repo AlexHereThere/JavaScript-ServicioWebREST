@@ -31,4 +31,13 @@ let activos = await models.Activo.findAll();
 await tag.addActivos(activos);
 }
 
+async function consulta()
+{
+ const activos = await models.Activo.findAll();
+ activos.forEach(activo=>{
+    console.log(activo.dataValues);
+ })
+ models.sequelize.close();
+}
+
 crear_y_relacionar();
