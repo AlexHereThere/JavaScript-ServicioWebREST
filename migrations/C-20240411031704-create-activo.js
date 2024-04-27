@@ -30,16 +30,18 @@ module.exports = {
       responsableId: {
         type: Sequelize.INTEGER,
         references:{
-          model: 'responsables',
+          model: 'Responsables',
           key: 'id'
-        }
+        },
+        allowNull: true
       },
       ubicacionId: {
         type: Sequelize.INTEGER,
         references:{
-          model: 'ubicaciones',
+          model: 'Ubicaciones',
           key: 'id'
-        }
+        },
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

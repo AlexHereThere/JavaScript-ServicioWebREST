@@ -1,25 +1,3 @@
-const act = require('./activoModel.js') //indicar que se ocupa activoModel
-
-const bd = [ //lista de ubicaiciones (falsos)
-    {
-        id:0,
-        desc:"Cuarto que se utiliza para tomar clases",
-        activos:act.findByUbicacion("cubiculo"),//se lleno este campo utilizando los datos dados en activoModel
-        imagen:"/Imagenes/cubiculo.png"
-    },
-    {
-        id:1,
-        desc:"Cuarto lleno de material para llevar a cabo proyectos electronicos",
-        activos:act.findByUbicacion("laboratorio"),
-        imagen:"/Imagenes/laboratorio.png"
-    },
-    {
-        id:2,
-        desc:"Cuarto de trabajo de un docente, se puede estudiar y trabajar bien en el.",
-        activos:act.findByUbicacion("oficina"),
-        imagen:"/Imagenes/oficina.png"
-    }
-]
 
  function findAll()
 {

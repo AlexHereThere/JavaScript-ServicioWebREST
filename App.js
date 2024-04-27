@@ -5,8 +5,9 @@ const cors = require('cors'); //intercambio de recursos de origen cruzado
 const app = express();
 
 const activoRouter = require('./routers/activos.js');
-const responsableRouter = require('./routers/responsables.js') //dividr el control de pedidos en routers
-const ubicacionRouter = require('./routers/ubicaciones.js') 
+const responsableRouter = require('./routers/responsables.js'); //dividr el control de pedidos en routers
+const ubicacionRouter = require('./routers/ubicaciones.js');
+const tagRouter = require('./routers/tags.js');
 
 app.use(express.json());//para posibilitar la lectura del body, cuando se hacen operaciones que ocupan datos
 app.use(express.urlencoded({extended:true}));//de parte del cliente (POST,PATCH)
@@ -19,6 +20,7 @@ app.use(cors({
 app.use('/activo',activoRouter);
 app.use('/responsable',responsableRouter);//indicar como se accesan para el cliente las rutas a los recursos.
 app.use('/ubicacion',ubicacionRouter);
+app.use('/tag',tagRouter);
 
 const port = 4000;
 

@@ -1,94 +1,139 @@
-const resp = require('../modelos/responsableModel.js');//especificar que se ocupa responsableModel
+const resp = require('../modelos_backend/responsableModel.js');//especificar que se ocupa responsableModel
 
-function fetchAll(req,res)
+async function fetchAll(req,res)
 {
-    res.json(resp.findAll());//utilizan funciones declaradas en responsableModel
+    res.json(await resp.findAll());//utilizan funciones declaradas en responsableModel
 }
-function fetchById(req,res)//funciones para GET del servicio web, en relacion de responsables
+async function fetchById(req,res)//funciones para GET del servicio web, en relacion de responsables
 {
-    if(resp.findById(req.params.id)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(resp.findById(req.params.id));
+    if(await resp.findById(req.params.id)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await resp.findById(req.params.id));
 }
-function fetchByNumEmp(req,res)
+async function fetchByNumEmp(req,res)
 {
-    if(resp.findByNumEmp(req.params.numEmp)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(resp.findByNumEmp(req.params.numEmp));
+    if(await resp.findByNumEmp(req.params.numEmp)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await resp.findByNumEmp(req.params.numEmp));
 }
-function fetchByNombre(req,res)
+async function fetchByNombre(req,res)
 {
-    if(resp.findByNombre(res.params.nombre)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(resp.findByNombre(res.params.nombre));
+    if(await resp.findByNombre(req.params.nombre)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await resp.findByNombre(req.params.nombre));
 }
 
-function addResponsable(req,res)//funcion para POST del servicio web, en relacion de activos
+async function addResponsable(req,res)//funcion para POST del servicio web, en relacion de activos
 {
-    const newRes = req.body;
-    if(resp.esResponsable(newRes) && !resp.estaResponsable(newRes))//si es responsable y no esta en la lista de responsables
-    {
-        resp.addNew(newRes);//agregarlo
-        res.json("Se agrego nuevo responsable.");
+    try{
+        const newRes = req.body;
+        await resp.addNew(newRes);//agregarlo
+        res.status(200).json("Se agrego nuevo responsable.");
     }//si no marca error
-    else res.json("Error: no se acepto responsable nuevo (ya existe o no tiene los parametros necesarios).")
+    catch(err)
+    {
+        console.error("Error agregando responsable:",err)
+        res.status(500).json("Error: interno del servidor al momento de agregar responsable.")
+    }
 }
 
-function changeById(req,res)
+async function changeById(req,res)
 {
-    const newVal = req.body;
-    if(resp.findById(req.params.id)!=null && resp.esResponsable(newVal))//buscar si existe el responsable que se desea
-    {//cambiar
-        resp.cambiarResp(newVal,resp.findById(req.params.id))
-        res.json("Se cambio contenido de responsable")
+    try{
+        const newVal = req.body;
+        if(await resp.findById(req.params.id)!=null)//buscar si existe el responsable que se desea
+        {//cambiar
+            await resp.cambiarResp(newVal,await resp.findById(req.params.id))
+            res.status(200).json("Se cambio contenido de responsable")
+        }
+        else res.status(400).json("Error: no se encontro el responsable a cambiar.")
     }
-    else res.json("Error: no se encontro el responsable a cambiar o el nuevo activo no es apto para remplazar el anterior")
-}
-function changeByNumEmp(req,res)//funciones para PATCH del servicio web, en relacion de activos
-{
-    const newVal = req.body;
-    if(resp.findByNumEmp(req.params.numEmp)!=null && resp.esResponsable(newVal))
+     catch(err)
     {
-        resp.cambiarResp(newVal,resp.findByNumEmp(req.params.numEmp))
-        res.json("Se cambio contenido de responsable")
+        console.error("Error cambiando responsable:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar responsable.")
     }
-    else res.json("Error: no se encontro el responsable a cambiar o el nuevo activo no es apto para remplazar el anterior")
 }
-function changeByNombre(req,res)
+async function changeByNumEmp(req,res)//funciones para PATCH del servicio web, en relacion de activos
 {
-    const newVal = req.body;
-    if(resp.findByNombre(req.params.nombre)!=null && resp.esResponsable(newVal))
-    {
-        resp.cambiarResp(newVal,resp.findByNombre(req.params.nombre))
-        res.json("Se cambio contenido de responsable")
+    try{
+        const newVal = req.body;
+        if(await resp.findByNumEmp(req.params.numEmp)!=null)
+        {
+            await resp.cambiarResp(newVal,await resp.findByNumEmp(req.params.numEmp))
+            res.status(200).json("Se cambio contenido de responsable")
+        }
+        else res.status(400).json("Error: no se encontro el responsable a cambiar.")
     }
-    else res.json("Error: no se encontro el responsable a cambiar o el nuevo activo no es apto para remplazar el anterior")
+    catch(err)
+    {
+       console.error("Error cambiando responsable:",err)
+       res.status(500).json("Error: interno del servidor al momento de cambiar responsable.")
+    }
+
+}
+async function changeByNombre(req,res)
+{
+    try{
+        const newVal = req.body;
+        if(await resp.findByNombre(req.params.nombre)!=null)
+        {
+            await resp.cambiarResp(newVal,await resp.findByNombre(req.params.nombre))
+            res.status(200).json("Se cambio contenido de responsable")
+        }
+        else res.status(400).json("Error: no se encontro el responsable a cambiar.")
+    }
+    catch(err)
+    {
+       console.error("Error cambiando responsable:",err)
+       res.status(500).json("Error: interno del servidor al momento de cambiar responsable.")
+    }
 }
 
-function deleteById(req,res)
+async function deleteById(req,res)
 {
-    if(resp.findById(req.params.id)!=null)//primero busca si existe el que se quiere eliminar.
-    {
-        resp.eliminarResp(resp.findById(req.params.id));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await resp.findById(req.params.id)!=null)//primero busca si existe el que se quiere eliminar.
+        {
+            await resp.eliminarResp(await resp.findById(req.params.id));
+            res.status(200).json("Se elimino el responsable exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el responsable que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando responsable:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar responsable.")
+    }
 }
-function deleteByNumEmp(req,res)//funciones para DELETE del servicio web, en relacion de activos
+async function deleteByNumEmp(req,res)//funciones para DELETE del servicio web, en relacion de activos
 {
-    if(resp.findByNumEmp(req.params.numEmp)!=null)
-    {
-        resp.eliminarResp(resp.findById(req.params.numEmp));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await resp.findByNumEmp(req.params.numEmp)!=null)
+        {
+           await resp.eliminarResp(await resp.findById(req.params.numEmp));
+            res.status(200).json("Se elimino el responsable exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el responsable que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando responsable:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar responsable.")
+    }
 }
-
-function deleteByNombre(req,res)
+async function deleteByNombre(req,res)
 {
-    if(resp.findByNombre(req.params.nombre)!=null)
-    {
-        resp.eliminarResp(resp.findById(req.params.nombre));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await resp.findByNombre(req.params.nombre)!=null)
+        {
+            await resp.eliminarResp(await resp.findById(req.params.nombre));
+            res.status(200).json("Se elimino el responsable exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el responsable que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando responsable:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar responsable.")
+    }
 }
 
 

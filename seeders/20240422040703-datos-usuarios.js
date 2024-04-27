@@ -17,11 +17,15 @@ module.exports = {
       nombre:"Alejandro Castro Renteria",
       tipo:"ClienteAPI",
       contrasena:"AlejandroEsChilo",
+      createdAt:new Date(),
+      updatedAt:new Date()
    },
    {
       nombre:"Fernando Riveras Vivos",
       tipo:"UsuarioAPP",
-      contrasena:"AmoBerenjena42"
+      contrasena:"AmoBerenjena42",
+      createdAt:new Date(),
+      updatedAt:new Date()
    }
   ],{})
   },

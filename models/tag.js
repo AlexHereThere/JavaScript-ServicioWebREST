@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Tag.belongsToMany(models.Activo,{through:'ActivoTag'})
+      Tag.belongsToMany(models.Activo,{
+        through:'ActivoTag',
+        onDelete: 'CASCADE'
+      });
     }
   }
   Tag.init({

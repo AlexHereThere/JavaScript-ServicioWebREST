@@ -1,4 +1,4 @@
-const ubi = require('../modelos/ubicacionModel.js')//especificar que se ocupa ubicacionModel
+const ubi = require('../modelos_backend/ubicacionModel.js')//especificar que se ocupa ubicacionModel
 
 function fetchAll(req,res)
 {

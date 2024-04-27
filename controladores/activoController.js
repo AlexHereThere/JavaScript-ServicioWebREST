@@ -1,186 +1,276 @@
-const act = require('../modelos/activoModel.js')//especificar que se ocupa activoModel
+const act = require('../modelos_backend/activoModel')//especificar que se ocupa activoModel
 
-function fetchAll(req,res)
+async function fetchAll(req,res)
 {
-    res.json(act.findAll());//utilizan funciones declaradas en activoModel
+    res.json(await act.findAll());//utilizan funciones declaradas en activoModel
 }
-function fetchById(req,res)
+async function fetchById(req,res)
 {
-    if(act.findById(req.params.id)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findById(req.params.id));
+    if(await act.findById(req.params.id)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findById(req.params.id));
 }
-function fetchBySerie(req,res)//funciones para GET del servicio web, en relacion de activos
+async function fetchBySerie(req,res)//funciones para GET del servicio web, en relacion de activos
 {
-    if(act.findBySerie(req.params.serie)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findBySerie(req.params.serie));
+    if(await act.findBySerie(req.params.serie)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findBySerie(req.params.serie));
 }
-function fecthByTipo(req,res)
+async function fecthByTag(req,res)
 {
-    if(act.findByTipo(req.params.tipo)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findByTipo(req.params.tipo));
+    if(await act.findByTag(req.params.tipo)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findByTag(req.params.tipo));
 }
-function fetchByNumInv(req,res)
+async function fetchByNumInv(req,res)
 {
-    if(act.findByNumInv(req.params.numInv)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findByNumInv(req.params.numInv));
+    if(await act.findByNumInv(req.params.numInv)==undefined) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findByNumInv(req.params.numInv));
 }
-function fetchByUbicacion(req,res)
+async function fetchByUbicacionId(req,res)
 {
-    if(act.findByUbicacion(req.params.ubicacion)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findByUbicacion(req.params.ubicacion));
+
+    if(await act.findByUbicacionId(req.params.ubicacionId)==0) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findByUbicacionId(req.params.ubicacionId));
 }
-function fetchByResponsable(req,res)
+async function fetchByResponsableId(req,res)
 {
-    if(act.findByResponsable(req.params.responsable)==undefined) res.json("Error: no se encontro recurso.");
-    else res.json(act.findByResponsable(req.params.responsable));
+    if(await act.findByResponsableId(req.params.responsableId)==0) res.status(400).json("Error: no se encontro recurso.");
+    else res.json(await act.findByResponsableId(req.params.responsableId));
 }
 
-function addActivo(req,res)//funcion para POST del servicio web, en relacion de activos
+async function addActivo(req,res)//funcion para POST del servicio web, en relacion de activos
 {
-    const newAct = req.body;
-    if(act.esActivo(newAct) && !act.estaActivo(newAct))//si es activo y no esta en la lista de activos
-    {
-        act.addNew(newAct);//agregarlo
+    try{
+        const newAct = req.body;
+        await act.addNew(newAct);//agregarlo
         res.json("Se agrego nuevo activo.");
-    }//si no marca error.
-    else res.json("Error: no se acepto activo nuevo (ya existe o no tiene los parametros necesarios).")
+    } 
+    catch(err)
+    {
+        console.error("Error agregando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de agregar activo.")
+    }
+    
 }
 
-function changeById(req,res)
+async function changeById(req,res)
 {
-    const newVal = req.body;
-    if(act.findById(req.params.id)!=null && act.esActivo(newVal))//buscar si existe el activo que se desea cambiar
-    {//y si es valido el que el que lo cambiara
-        act.cambiarActivo(newVal,act.findById(req.params.id))
-        res.json("Se cambio contenido de activo")
+    try{
+        const newVal = req.body;
+        if(await act.findById(req.params.id)!=null)//buscar si existe el activo que se desea cambiar
+        {//y si es valido el que el que lo cambiara
+            await act.cambiarActivo(newVal,await act.findById(req.params.id));
+            res.status(200).json("Se cambio contenido de activo");
+        }
+        else res.status(400).json("Error: no se encontro el activo a cambiar.");
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
-}
-function changeBySerie(req,res)
-{
-    const newVal = req.body;
-    if(act.findBySerie(req.params.serie)!=null && act.esActivo(newVal))
+    catch(err)
     {
-        act.cambiarActivo(newVal,act.findBySerie(req.params.serie))
-        res.json("Se cambio contenido de activo")
+        console.error("Error cambiando activo:",err);
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.");
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
 }
-function changeByNumInv(req,res)//funciones para PATCH del servicio web, en relacion de activos
+async function changeBySerie(req,res)
 {
-    const newVal = req.body;
-    if(act.findByNumInv(req.params.numInv)!=null && act.esActivo(newVal))
-    {
-        act.cambiarActivo(newVal,act.findByNumInv(req.params.numInv))
-        res.json("Se cambio contenido de activo")
+    try{
+        const newVal = req.body;
+        if(await act.findBySerie(req.params.serie)!=null)
+        {
+            await act.cambiarActivo(newVal,await act.findBySerie(req.params.serie))
+            res.status(200).json("Se cambio contenido de activo")
+        }
+        else res.staus(400).json("Error: no se encontro el activo a cambiar.")
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
+    catch(err)
+    {
+        console.error("Error cambiando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.")
+    }
 }
-function changeByTipo(req,res)
+async function changeByNumInv(req,res)//funciones para PATCH del servicio web, en relacion de activos
 {
-    const newVal = req.body;
-    if(act.findByTipo(req.params.tipo)!=null && act.esActivo(newVal))
-    {
-        act.cambiarActivo(newVal,act.findByTipo(req.params.tipo))
-        res.json("Se cambio contenido de activo")
+    try{
+        const newVal = req.body;
+        if(await act.findByNumInv(req.params.numInv)!=null)
+        {
+            await act.cambiarActivo(newVal,await act.findByNumInv(req.params.numInv))
+            res.status(200).json("Se cambio contenido de activo")
+        }
+        else res.status(400).json("Error: no se encontro el activo a cambiar.")
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
+    catch(err)
+    {
+        console.error("Error cambiando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.")
+    }
 }
-function changeByResponsable(req,res)
+async function changeByTag(req,res)
 {
-    const newVal = req.body;
-    if(act.findByResponsable(req.params.responsable)!=null && act.esActivo(newVal))
-    {
-        act.cambiarActivo(newVal,act.findByResponsable(req.params.responsable))
-        res.json("Se cambio contenido de activo")
+    try{
+        const newVal = req.body;
+        if(await act.findByTag(req.params.tipo)!=null)
+        {
+            await act.cambiarActivo(newVal,await act.findByTipo(req.params.tipo))
+            res.status(200).json("Se cambio contenido de activo")
+        }
+        else res.status(400).json("Error: no se encontro el activo a cambiar.")
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
+    catch(err)
+    {
+        console.error("Error cambiando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.")
+    }
 }
-function changeByUbicacion(req,res)
+async function changeByResponsableId(req,res)
 {
-    const newVal = req.body;
-    if(act.findByUbicacion(req.params.ubicacion)!=null && act.esActivo(newVal))
-    {
-        act.cambiarActivo(newVal,act.findByUbicacion(req.params.ubicacion))
-        res.json("Se cambio contenido de activo")
+    try{
+        const newVal = req.body;
+        if(await act.findByResponsableId(req.params.responsableId)!=null)
+        {
+            await act.cambiarActivo(newVal,await act.findByResponsableId(req.params.responsable))
+            res.status(200).json("Se cambio contenido de activo")
+        }
+        else res.status(400).json("Error: no se encontro el activo a cambiar.")
     }
-    else res.json("Error: no se encontro el activo a cambiar o el nuevo activo no es apto para remplazar el anterior")
+    catch(err)
+    {
+        console.error("Error cambiando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.")
+    }
+}
+async function changeByUbicacionId(req,res)
+{
+    try{
+        const newVal = req.body;
+        if(await act.findByUbicacionId(req.params.ubicacionId)!=null)
+        {
+            await act.cambiarActivo(newVal,await act.findByUbicacionId(req.params.ubicacionId))
+            res.status(200).json("Se cambio contenido de activo")
+        }
+        else res.status(400).json("Error: no se encontro el activo a cambiar.")
+    }
+    catch(err)
+    {
+        console.error("Error cambiando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de cambiar activo.")
+    }
 }
 
-function deleteById(req,res) 
+async function deleteById(req,res) 
 {
-    if(act.findById(req.params.id)!=null) //primero busca si existe el que se quiere eliminar.
-    {
-        act.eliminarActivo(act.findById(req.params.id));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findById(req.params.id)!=null) //primero busca si existe el que se quiere eliminar.
+        {
+            await act.eliminarActivo(await act.findById(req.params.id));
+            res.status(200).json("Se elimino el activo exitosamente.");
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.");
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err);
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.");
+    }
 }
-function deleteBySerie(req,res)//funciones para DELETE del servicio web, en relacion de activos
+async function deleteBySerie(req,res)//funciones para DELETE del servicio web, en relacion de activos
 {
-    if(act.findBySerie(req.params.serie)!=null)
-    {
-        act.eliminarActivo(act.findBySerie(req.params.serie));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findBySerie(req.params.serie)!=null)
+        {   
+            await act.eliminarActivo(await act.findBySerie(req.params.serie));
+            res.status(200).json("Se elimino el activo exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.")
+    }
 }
-function deleteByTipo(req,res)
+async function deleteByTag(req,res)
 {
-    if(act.findByTipo(req.params.tipo)!=null)
-    {
-        act.eliminarActivo(act.findByTipo(req.params.tipo));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findByTag(req.params.tipo)!=null)
+        {
+            await act.eliminarActivo(await act.findByTag(req.params.tipo));
+            res.status(200).json("Se elimino el activo exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.")
+    }
 }
-function deleteByNumInv(req,res)
+async function deleteByNumInv(req,res)
 {
-    if(act.findByNumInv(req.params.numInv)!=null)
-    {
-        act.eliminarActivo(act.findByNumInv(req.params.numInv));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findByNumInv(req.params.numInv)!=null)
+        {
+            await act.eliminarActivo(await act.findByNumInv(req.params.numInv));
+            res.status(200).json("Se elimino el activo exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.")
+    }
+    
 }
-function deleteByResponsable(req,res)
+async function deleteByResponsableId(req,res)
 {
-    if(act.findByResponsable(req.params.responsable)!=null)
-    {
-        act.eliminarActivo(act.findByResponsable(req.params.responsable));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findByResponsableId(req.params.responsableId)!=null)
+        {
+            await act.eliminarActivo(await act.findByResponsableId(req.params.responsableId));
+            res.status(200).json("Se elimino el activo exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.")
+    }
 }
-function deleteByUbicacion(req,res)
+async function deleteByUbicacionId(req,res)
 {
-    if(act.findByUbicacion(req.params.ubicacion)!=null)
-    {
-        act.eliminarActivo(act.findByUbicacion(req.params.ubicacion));
-        res.json("Se elimino el activo exitosamente.")
+    try{
+        if(await act.findByUbicacionId(req.params.ubicacionId)!=null)
+        {
+            await act.eliminarActivo(await act.findByUbicacionId(req.params.ubicacionId));
+            res.status(200).json("Se elimino el activo exitosamente.")
+        }
+        else res.status(400).json("Error: no se encontro el activo que se quiere eliminar.")
     }
-    else res.json("Error: no se encontro el activo que se quiere eliminar.")
+    catch(err)
+    {
+        console.error("Error borando activo:",err)
+        res.status(500).json("Error: interno del servidor al momento de borrar activo.")
+    }
 }
 
 module.exports = { //exportaciones para que se puedan usar en App.js
     fetchAll:fetchAll,
     fetchById:fetchById,
     fetchBySerie:fetchBySerie,
-    fecthByTipo:fecthByTipo,
+    fecthByTag:fecthByTag,
     fetchByNumInv:fetchByNumInv,
-    fetchByResponsable:fetchByResponsable,
-    fetchByUbicacion:fetchByUbicacion,
+    fetchByResponsableId:fetchByResponsableId,
+    fetchByUbicacionId:fetchByUbicacionId,
     addActivo:addActivo,
     changeById:changeById,
     changeBySerie:changeBySerie,
     changeByNumInv:changeByNumInv,
-    changeByTipo:changeByTipo,
-    changeByResponsable:changeByResponsable,
-    changeByUbicacion:changeByUbicacion,
+    changeByTag:changeByTag,
+    changeByResponsableId:changeByResponsableId,
+    changeByUbicacionId:changeByUbicacionId,
     deleteById:deleteById,
     deleteBySerie:deleteBySerie,
-    deleteByTipo:deleteByTipo,
+    deleteByTag:deleteByTag,
     deleteByNumInv:deleteByNumInv,
-    deleteByResponsable:deleteByResponsable,
-    deleteByUbicacion:deleteByUbicacion
+    deleteByResponsableId:deleteByResponsableId,
+    deleteByUbicacionId:deleteByUbicacionId
 }

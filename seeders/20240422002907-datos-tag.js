@@ -14,10 +14,14 @@ module.exports = {
     */
    await queryInterface.bulkInsert('Tags',[
     {
-      nombre: "ParteComputadora"
+      nombre: "ParteComputadora",
+      createdAt:new Date(),
+      updatedAt:new Date()
     },
     {
-      nombre: "Mueble"
+      nombre: "Mueble",
+      createdAt:new Date(),
+      updatedAt:new Date()
     }
    ],{});
   },
