@@ -16,14 +16,14 @@ module.exports = {
     {
       nombre:"Alejandro Castro Renteria",
       tipo:"ClienteAPI",
-      contrasena:"AlejandroEsChilo",
+      email:"a1183297@uabc.edu.mx",
       createdAt:new Date(),
       updatedAt:new Date()
    },
    {
       nombre:"Fernando Riveras Vivos",
       tipo:"UsuarioAPP",
-      contrasena:"AmoBerenjena42",
+      email:"alguienMas@uabc.edu.mx",
       createdAt:new Date(),
       updatedAt:new Date()
    }

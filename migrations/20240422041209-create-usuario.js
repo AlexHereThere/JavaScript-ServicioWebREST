@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      contrasena: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true
